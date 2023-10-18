@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
 from collections import OrderedDict
 from django.urls import reverse
-from django.template.loader import render_to_string
 
 
 monthly_challenges = OrderedDict({
@@ -49,7 +48,6 @@ def monthly_challenge(request, month):
             "text": challenge_text
         })
     except:
-        # we did not use render here because it only returns a success code 200 while 
-        # we need a 404 return value
-        response_data = render_to_string("404.html")
-        return HttpResponseNotFound(response_data)
+        # it is raised as an error and automatically look for a 404.html
+        # but will only be shown when debug = False
+        raise Http404()
